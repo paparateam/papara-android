@@ -131,7 +131,7 @@ Papara.getInstance().setDebugEnabled(true); // or false for disable
 ```
 
 
-Lisans
+License
 ====================
 
 Licensed under the Apache License, Version 2.0 (the "License");

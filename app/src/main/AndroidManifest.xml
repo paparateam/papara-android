@@ -16,6 +16,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.mobillium.paparasdk.ResultActivity"
+            android:theme="@style/Theme.Transparent"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="papara.sdk.action.app87826504"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

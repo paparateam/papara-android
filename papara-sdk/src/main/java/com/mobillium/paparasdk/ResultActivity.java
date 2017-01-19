@@ -25,7 +25,10 @@ public class ResultActivity extends AppCompatActivity {
         if (payment != null) {
             startPaparaApp(payment);
         } else {
-            Papara.getInstance().getPaparaCallback().onFailure();
+            //TODO
+            String message = "message";
+            int code = 0;
+            Papara.getInstance().getPaparaCallback().onFailure(message,code);
             PaparaLogger.writeErrorLog("You have to send a valid PaparaPayment model to SDK");
             finish();
         }
@@ -60,7 +63,10 @@ public class ResultActivity extends AppCompatActivity {
                 showAppDialog();
             }
         } else {
-            Papara.getInstance().getPaparaCallback().onFailure();
+            //TODO
+            String message = "message";
+            int code = 0;
+            Papara.getInstance().getPaparaCallback().onFailure(message,code);
             PaparaLogger.writeInfoLog("Result: Amount Format Failure");
             finish();
         }
@@ -71,17 +77,19 @@ public class ResultActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         int result = intent.getExtras().getInt("result");
+        String message = intent.getExtras().getString("message","");
+        int code = intent.getExtras().getInt("code",0);
         switch (result) {
             case Papara.PAYMENT_SUCCESS:
-                Papara.getInstance().getPaparaCallback().onSuccess();
+                Papara.getInstance().getPaparaCallback().onSuccess(message,code);
                 PaparaLogger.writeInfoLog("Result: Sucess");
                 break;
             case Papara.PAYMENT_FAIL:
-                Papara.getInstance().getPaparaCallback().onFailure();
+                Papara.getInstance().getPaparaCallback().onFailure(message,code);
                 PaparaLogger.writeInfoLog("Result: Failure");
                 break;
             case Papara.PAYMENT_CANCEL:
-                Papara.getInstance().getPaparaCallback().onCancel();
+                Papara.getInstance().getPaparaCallback().onCancel(message,code);
                 PaparaLogger.writeInfoLog("Result: Cancel");
                 break;
 
@@ -120,6 +128,8 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void showAppDialog() {
+
+
         String message = getString(R.string.install_papara);
 
         //change message if Sandbox mode on
@@ -128,12 +138,15 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.not_installed))
+                .setTitle(getString(R.string.title))
                 .setMessage(message)
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
-                        Papara.getInstance().getPaparaCallback().onCancel();
+                        //TODO
+                        String msg = getString(R.string.not_installed);
+                        final int code = 0;
+                        Papara.getInstance().getPaparaCallback().onFailure(msg,code);
                         PaparaLogger.writeInfoLog("Result: Papara App not Installed");
                         finish();
                     }
@@ -143,7 +156,10 @@ public class ResultActivity extends AppCompatActivity {
             //add single button if Sandbox mode on
             dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Papara.getInstance().getPaparaCallback().onCancel();
+                    //TODO
+                    String msg = getString(R.string.not_installed);
+                    final int code = 0;
+                    Papara.getInstance().getPaparaCallback().onFailure(msg,code);
                     PaparaLogger.writeInfoLog("Result: Papara App not Installed");
                     finish();
                 }
@@ -153,14 +169,20 @@ public class ResultActivity extends AppCompatActivity {
             dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.install_now), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     goToApp();
-                    Papara.getInstance().getPaparaCallback().onCancel();
+                    //TODO
+                    String msg = getString(R.string.not_installed);
+                    final int code = 0;
+                    Papara.getInstance().getPaparaCallback().onFailure(msg,code);
                     PaparaLogger.writeInfoLog("Result: User clicked to install the App");
                     finish();
                 }
             });
             dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Papara.getInstance().getPaparaCallback().onCancel();
+                    //TODO
+                    String msg = getString(R.string.not_installed);
+                    final int code = 0;
+                    Papara.getInstance().getPaparaCallback().onFailure(msg,code);
                     PaparaLogger.writeInfoLog("Result: Papara App not Installed");
                     finish();
                 }

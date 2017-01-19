@@ -50,20 +50,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     Papara.getInstance().sendMoney(MainActivity.this, payment, new PaparaCallback() {
                         @Override
-                        public void onSuccess() {
+                        public void onSuccess(String message, int code) {
                             //Odeme islemi basarili
                             Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
-                        public void onFailure() {
+                        public void onFailure(String message, int code) {
                             //Odeme islemi basarisiz
                             Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
 
                         }
 
                         @Override
-                        public void onCancel() {
+                        public void onCancel(String message, int code) {
                             //Odeme islemi iptal edildi
                             Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
                         }

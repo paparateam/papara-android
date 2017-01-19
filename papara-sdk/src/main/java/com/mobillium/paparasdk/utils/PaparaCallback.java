@@ -4,9 +4,9 @@ package com.mobillium.paparasdk.utils;
 
 public interface PaparaCallback {
 
-    public void onSuccess();
+    public void onSuccess(String message, int code);
 
-    public void onFailure();
+    public void onFailure(String message, int code);
 
-    public void onCancel();
+    public void onCancel(String message, int code);
 }

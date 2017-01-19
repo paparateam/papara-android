@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">Library</string>
-    <string name="install_papara">Bu işlemi gerçekleştirmek için Papara uygulamasını yüklemeniz gerekmektedir.</string>
-    <string name="install_papara_sandbox">Papara SandBox sürümünü yüklemeniz gerekmektedir.</string>
-    <string name="not_installed">Papara Yüklü Değil</string>
+    <string name="app_name">Papara SDK</string>
+    <string name="install_papara">Paparadan para gönderebilmek için Papara uygulamasını yüklemelisiniz.</string>
+    <string name="install_papara_sandbox">Paparadan para gönderebilmek için Papara SandBox uygulamasını yüklemelisiniz.</string>
+    <string name="title">Papara</string>
+    <string name="not_installed">Yüklemekten Vazgeçildi</string>
     <string name="install_now">Yükle</string>
     <string name="cancel">Vazgeç</string>
 </resources>

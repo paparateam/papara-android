@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Papara SDK</string>
+    <string name="install_papara">To send money from Papara, you must first download the Papara app.</string>
+    <string name="install_papara_sandbox">To send money from Papara Sandbox, you must first download the Papara app.</string>
+    <string name="title">Papara</string>
+    <string name="not_installed">User abandoned the operation</string>
+    <string name="install_now">Install</string>
+    <string name="cancel">Cancel</string>
+</resources>

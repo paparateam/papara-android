@@ -43,7 +43,7 @@ dependencies {
 
 ### Application Id
 
-You need a unique api key to integrate sdk to your application. You can get it from
+You need a unique **APP_ID** to integrate sdk to your application. You can get it from
 http://papara.com/iletisim/ 
 
 To use Papara SDK, you need to install Papara Android Application on the same device. If it's not installed, a warning message will be displayed on screen. You can download it from https://play.google.com/store/apps/details?id=com.mobillium.papara 
@@ -54,7 +54,28 @@ To use Papara SDK on **Sandbox Mode**, you need to install **Papara Sandbox Andr
 
 ### Initialization
 
-You have to initialize Papara SDK with your **APP_ID**.
+Open your project's manifest.xml file and paste the codes below into application block. 
+
+After that, append your **APP_ID** to the end of the name value of intent filter action. For example if your Papara APP_ID is **1234**, the declaration looks like:
+
+```xml
+<application
+
+    <activity 
+        android:name="com.mobillium.paparasdk.PaparaPaymentActivity"
+        android:theme="@style/Theme.Transparent"
+        android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="papara.sdk.action.App1234"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+
+    </activity>
+</application>
+```
+
+You need to initialize Papara SDK before you can use it. Add a call to **Papara.sdkInitialize** from onCreate in your Activity class with your **APP_ID**.
+
 
 **SANDBOX_MODE** : Enable/Disable SandBox mode. (Boolean)
 
@@ -93,32 +114,46 @@ If payment process **interrupted** with an error, **onError()** method will be c
 
 If payment process **cancelled** by user, **onCancel()** method will be called.
 
+
+
 ```java
 import com.mobillium.paparasdk.Papara;
 import com.mobillium.paparasdk.models.PaparaPayment;
 import com.mobillium.paparasdk.utils.PaparaCallback;
 
-Papara.getInstance().startPayment(MainActivity.this, paymentModel, new PaparaCallback() {
-                    @Override
-                    public void onSuccess() {
-                        //Odeme islemi basarili
-                        Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                    }
+    Papara.getInstance().sendMoney(MainActivity.this, payment, new PaparaCallback() {
+          @Override
+          public void onSuccess(String message, int code) {
+              //Payment Successful
+              showResultDialog(message, code);
+              Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
+          }
 
-                    @Override
-                    public void onFailure() {
-                        //Odeme islemi basarisiz
-                        Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+          @Override
+          public void onFailure(String message, int code) {
+              //Payment Failed
+              showResultDialog(message, code);
+              Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
 
-                    }
-                     @Override
-                     public void onCancel() {
-                        //Odeme islemi iptal edildi
-                        Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
-                        }
-                });
+          }
+
+          @Override
+          public void onCancel(String message, int code) {
+              //Payment Cancelled by user
+              showResultDialog(message, code);
+              Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+              }
+       });
 ```
+Result **messages** and result **codes** will be returned to your app. You can use these default messages or override the messages according to result codes. Web API related result codes can be requested through http://papara.com/iletisim.
 
+Papara SDK related static result codes:
+
+ - **0** : Transaction Cancelled by User 
+ - **-1** : An Unexpected Error(Out of any case) 
+ - **-2** : Null Payment Model 
+ - **-3** : Invalid Payment Amount Format
+ - **-4** : Papara App is not intalled on device 
 
 ### Debug Mode
 To enable **debugging logs**, you need to call **setDebugEnabled(boolean)** method.

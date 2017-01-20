@@ -59,8 +59,7 @@ Open your project's manifest.xml file and paste the codes below into application
 After that, append your **APP_ID** to the end of the name value of intent filter action. For example if your Papara APP_ID is **1234**, the declaration looks like:
 
 ```xml
-<application
-
+<application>
     <activity 
         android:name="com.mobillium.paparasdk.PaparaPaymentActivity"
         android:theme="@style/Theme.Transparent"

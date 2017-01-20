@@ -6,4 +6,8 @@
     <string name="not_installed">User abandoned the operation</string>
     <string name="install_now">Install</string>
     <string name="cancel">Cancel</string>
+    <string name="done">Ok</string>
+    <string name="validation_payment_model">You have to send a valid PaparaPayment model to SDK</string>
+    <string name="validation_format">Please check your amount input format.</string>
+    <string name="sdk_process_cancelled">Your transaction has been cancelled.</string>
 </resources>

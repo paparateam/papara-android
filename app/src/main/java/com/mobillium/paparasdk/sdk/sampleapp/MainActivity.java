@@ -1,6 +1,8 @@
 package com.mobillium.paparasdk.sdk.sampleapp;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -51,20 +53,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Papara.getInstance().sendMoney(MainActivity.this, payment, new PaparaCallback() {
                         @Override
                         public void onSuccess(String message, int code) {
-                            //Odeme islemi basarili
+                            //Payment Successfull
+                            showResultDialog(message, code);
                             Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onFailure(String message, int code) {
-                            //Odeme islemi basarisiz
+                            //Payment Failed
+                            showResultDialog(message, code);
                             Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
 
                         }
 
                         @Override
                         public void onCancel(String message, int code) {
-                            //Odeme islemi iptal edildi
+                            //Payment Cancelled by user
+                            showResultDialog(message, code);
                             Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -85,6 +90,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return true;
+    }
+
+
+    private void showResultDialog(final String message, int code) {
+
+        try {
+            final AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(getString(com.mobillium.paparasdk.R.string.title))
+                    .setMessage(message + " (" + code + ")")
+                    .setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create();
+
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

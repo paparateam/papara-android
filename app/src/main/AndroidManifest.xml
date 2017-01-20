@@ -17,11 +17,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.mobillium.paparasdk.ResultActivity"
+        <activity android:name="com.mobillium.paparasdk.PaparaPaymentActivity"
             android:theme="@style/Theme.Transparent"
             android:launchMode="singleTask">
             <intent-filter>
-                <action android:name="papara.sdk.action.app87826504"/>
+                <action android:name="papara.sdk.action.App87826504"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
 

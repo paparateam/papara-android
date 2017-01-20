@@ -35,6 +35,7 @@
             style="@style/paparaEditText"
             android:digits="01234567890,."
             android:hint="Örn: 10,50 veya 10.50"
+            android:text="1,00"
             android:inputType="numberDecimal"
             android:maxLines="1" />
 
@@ -46,6 +47,7 @@
             android:id="@+id/etDesc"
             style="@style/paparaEditText"
             android:gravity="top"
+            android:text="Test"
             android:inputType="textMultiLine"
             android:lines="5"
             android:maxLines="7" />

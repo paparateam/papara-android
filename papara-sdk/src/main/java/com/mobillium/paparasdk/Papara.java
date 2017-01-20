@@ -32,6 +32,10 @@ public class Papara {
     public static final int PAYMENT_FAIL = 0;
     public static final int PAYMENT_CANCEL = 2;
 
+    public static final int VALID_MODEL = -2;
+    public static final int VALID_FORMAT = -3;
+    public static final int VALID_NOT_INSTALLED = -4;
+
 
     PaparaCallback paparaCallback;
 
@@ -125,7 +129,7 @@ public class Papara {
             throw new PaparaSdkNotInitializedException("You must initialize the Papara SDK first");
         }
         this.paparaCallback = callback;
-        Intent intent = new Intent(activity, ResultActivity.class);
+        Intent intent = new Intent(activity, PaparaPaymentActivity.class);
         intent.putExtra("data", paparaPayment);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);

@@ -9,49 +9,47 @@ import android.os.Parcelable;
 
 public class PaparaPayment implements Parcelable {
 
-    private String amount;
-    private String desc;
-    private String walletId;
+    private String payment_id;
+    private String paymentUrl;
+    private String paymentAmount;
 
     public PaparaPayment() {
     }
 
-    public PaparaPayment(String appId, String amount, String desc, String walletId) {
-        this.amount = amount;
-        this.desc = desc;
-        this.walletId = walletId;
+    public PaparaPayment(String payment_id, String paymentUrl, String paymentAmount) {
+        this.payment_id = payment_id;
+        this.paymentUrl = paymentUrl;
+        this.paymentAmount = paymentAmount;
     }
 
-
-
-    public String getAmount() {
-        return amount;
+    public String getPayment_id() {
+        return payment_id;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public void setPayment_id(String payment_id) {
+        this.payment_id = payment_id;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getPaymentUrl() {
+        return paymentUrl;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setPaymentUrl(String paymentUrl) {
+        this.paymentUrl = paymentUrl;
     }
 
-    public String getWalletId() {
-        return walletId;
+    public String getPaymentAmount() {
+        return paymentAmount;
     }
 
-    public void setWalletId(String walletId) {
-        this.walletId = walletId;
+    public void setPaymentAmount(String paymentAmount) {
+        this.paymentAmount = paymentAmount;
     }
 
     protected PaparaPayment(Parcel in) {
-        amount = in.readString();
-        desc = in.readString();
-        walletId = in.readString();
+        payment_id = in.readString();
+        paymentUrl = in.readString();
+        paymentAmount = in.readString();
     }
 
     @Override
@@ -61,13 +59,13 @@ public class PaparaPayment implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(amount);
-        dest.writeString(desc);
-        dest.writeString(walletId);
+        dest.writeString(payment_id);
+        dest.writeString(paymentUrl);
+        dest.writeString(paymentAmount);
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<PaparaPayment> CREATOR = new Parcelable.Creator<PaparaPayment>() {
+    public static final Creator<PaparaPayment> CREATOR = new Creator<PaparaPayment>() {
         @Override
         public PaparaPayment createFromParcel(Parcel in) {
             return new PaparaPayment(in);

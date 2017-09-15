@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import com.mobillium.paparasdk.utils.PaparaCallback;
 import com.mobillium.paparasdk.utils.PaparaException;
 import com.mobillium.paparasdk.utils.PaparaSdkNotInitializedException;
+import com.mobillium.paparasdk.utils.PaparaSendMoneyCallback;
 
 /**
  * Created by oguzhandongul on 28/11/2016.
@@ -88,8 +89,8 @@ public class Papara {
      * undetermined if this function is not called. It should be called as early as possible.
      *
      * @param applicationContext The application context
-     * @param appId String identifier value provided by Papara
-     * @param sandBox boolean value determines SKD works in sandbox or live mode
+     * @param appId              String identifier value provided by Papara
+     * @param sandBox            boolean value determines SKD works in sandbox or live mode
      */
     public static synchronized void sdkInitialize(Context applicationContext, String appId, boolean sandBox) {
         if (sdkInitialized == true) {
@@ -117,20 +118,55 @@ public class Papara {
         return paparaCallback;
     }
 
+
     /**
-     * This function starts Payment Flow and launches Papara App
+     * This function starts Send Money Flow and launches Papara App
      *
-     * @param activity      The activity context
-     * @param paparaPayment The object model of payment
-     * @param callback      The callback that will be called when the returned to app from Papara. Cannot be null.
+     * @param activity        The activity context
+     * @param paparaSendMoney The object model of send money
+     * @param callback        The callback that will be called when the returned to app from Papara. Cannot be null.
      */
-    public void sendMoney(Activity activity, PaparaPayment paparaPayment, @NonNull final PaparaCallback callback) {
+    public void sendMoney(Activity activity, PaparaSendMoney paparaSendMoney, @NonNull final PaparaSendMoneyCallback callback) {
         if (!sdkInitialized) {
             throw new PaparaSdkNotInitializedException("You must initialize the Papara SDK first");
         }
         this.paparaCallback = callback;
-        Intent intent = new Intent(activity, PaparaPaymentActivity.class);
-        intent.putExtra("data", paparaPayment);
+        Intent intent = new Intent(activity, PaparaControllerActivity.class);
+        intent.putExtra("data", paparaSendMoney);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * This function starts Fetching Account Number Flow and launches Papara App
+     *
+     * @param activity The activity context
+     * @param callback The callback that will be called when the returned to app from Papara. Cannot be null.
+     */
+    public void getAccountNumber(Activity activity, @NonNull final PaparaCallback callback) {
+        if (!sdkInitialized) {
+            throw new PaparaSdkNotInitializedException("You must initialize the Papara SDK first");
+        }
+        this.paparaCallback = callback;
+        Intent intent = new Intent(activity, PaparaControllerActivity.class);
+        intent.putExtra("type", "accountNumber");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * This function starts Fetching Account Number Flow and launches Papara App
+     *
+     * @param activity The activity context
+     * @param callback The callback that will be called when the returned to app from Papara. Cannot be null.
+     */
+    public void makePayment(Activity activity, PaparaPayment paparaPayment, @NonNull final PaparaCallback callback) {
+        if (!sdkInitialized) {
+            throw new PaparaSdkNotInitializedException("You must initialize the Papara SDK first");
+        }
+        this.paparaCallback = callback;
+        Intent intent = new Intent(activity, PaparaControllerActivity.class);
+        intent.putExtra("payment", paparaPayment);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
     }

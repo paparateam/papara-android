@@ -61,7 +61,7 @@ After that, append your **APP_ID** to the end of the name value of intent filter
 ```xml
 <application>
     <activity 
-        android:name="com.mobillium.paparasdk.PaparaPaymentActivity"
+        android:name="com.mobillium.paparasdk.PaparaControllerActivity"
         android:theme="@style/Theme.Transparent"
         android:launchMode="singleTask">
             <intent-filter>
@@ -118,7 +118,7 @@ If payment process **cancelled** by user, **onCancel()** method will be called.
 ```java
 import com.mobillium.paparasdk.Papara;
 import com.mobillium.paparasdk.models.PaparaPayment;
-import com.mobillium.paparasdk.utils.PaparaCallback;
+import com.mobillium.paparasdk.utils.PaparaSendMoneyCallback;
 
     Papara.getInstance().sendMoney(MainActivity.this, payment, new PaparaCallback() {
           @Override

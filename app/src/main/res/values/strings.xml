@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Papara SDK Demo</string>
+
+    <!--service errors-->
+    <string name="error_internet">İnternet bağlantınızı kontrol ediniz.</string>
+    <string name="error_bilinmeyen">Üzgünüz şuanda size hizmet veremiyoruz. Lütfen daha sonra tekrar deneyiniz.</string>
+    <string name="error_cevap_yok">Üzgünüz şuanda size hizmet veremiyoruz. Lütfen daha sonra tekrar deneyiniz.</string>
 </resources>

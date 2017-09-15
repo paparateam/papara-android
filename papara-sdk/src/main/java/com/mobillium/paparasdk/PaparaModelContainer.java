@@ -7,8 +7,9 @@ import android.os.Parcelable;
  * Created by oguzhandongul on 28/11/2016.
  */
 
-public class PaparaPaymentContainer implements Parcelable {
+public class PaparaModelContainer implements Parcelable {
 
+    private PaparaSendMoney paparaSendMoney;
     private PaparaPayment paparaPayment;
     private String sdkVersion;
     private String packageName;
@@ -20,7 +21,15 @@ public class PaparaPaymentContainer implements Parcelable {
     private String appId;
     private String displayName;
 
-    public PaparaPaymentContainer() {
+    public PaparaModelContainer() {
+    }
+
+    public PaparaSendMoney getPaparaSendMoney() {
+        return paparaSendMoney;
+    }
+
+    public void setPaparaSendMoney(PaparaSendMoney paparaSendMoney) {
+        this.paparaSendMoney = paparaSendMoney;
     }
 
     public PaparaPayment getPaparaPayment() {
@@ -103,7 +112,8 @@ public class PaparaPaymentContainer implements Parcelable {
         this.displayName = displayName;
     }
 
-    protected PaparaPaymentContainer(Parcel in) {
+    protected PaparaModelContainer(Parcel in) {
+        paparaSendMoney = (PaparaSendMoney) in.readValue(PaparaSendMoney.class.getClassLoader());
         paparaPayment = (PaparaPayment) in.readValue(PaparaPayment.class.getClassLoader());
         sdkVersion = in.readString();
         packageName = in.readString();
@@ -123,6 +133,7 @@ public class PaparaPaymentContainer implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(paparaSendMoney);
         dest.writeValue(paparaPayment);
         dest.writeString(sdkVersion);
         dest.writeString(packageName);
@@ -136,15 +147,15 @@ public class PaparaPaymentContainer implements Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<PaparaPaymentContainer> CREATOR = new Parcelable.Creator<PaparaPaymentContainer>() {
+    public static final Parcelable.Creator<PaparaModelContainer> CREATOR = new Parcelable.Creator<PaparaModelContainer>() {
         @Override
-        public PaparaPaymentContainer createFromParcel(Parcel in) {
-            return new PaparaPaymentContainer(in);
+        public PaparaModelContainer createFromParcel(Parcel in) {
+            return new PaparaModelContainer(in);
         }
 
         @Override
-        public PaparaPaymentContainer[] newArray(int size) {
-            return new PaparaPaymentContainer[size];
+        public PaparaModelContainer[] newArray(int size) {
+            return new PaparaModelContainer[size];
         }
     };
 }

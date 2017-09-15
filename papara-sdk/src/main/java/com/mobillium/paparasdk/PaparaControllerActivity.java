@@ -13,14 +13,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.mobillium.paparasdk.utils.PaparaAccountNumberCallback;
 import com.mobillium.paparasdk.utils.PaparaLogger;
+import com.mobillium.paparasdk.utils.PaparaPaymentCallback;
+import com.mobillium.paparasdk.utils.PaparaSendMoneyCallback;
 import com.mobillium.paparasdk.utils.UriHelper;
 
 import static com.mobillium.paparasdk.Papara.VALID_FORMAT;
 import static com.mobillium.paparasdk.Papara.VALID_MODEL;
 import static com.mobillium.paparasdk.Papara.VALID_NOT_INSTALLED;
+import static com.mobillium.paparasdk.utils.UriHelper.TYPE_FETC_ACCOUNT_NUM;
+import static com.mobillium.paparasdk.utils.UriHelper.TYPE_PAYMENT;
 
-public class PaparaPaymentActivity extends AppCompatActivity {
+public class PaparaControllerActivity extends AppCompatActivity {
 
     boolean waitingForResult = false;
 
@@ -36,7 +41,7 @@ public class PaparaPaymentActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                PaparaPaymentActivity.this.finish();
+                PaparaControllerActivity.this.finish();
             }
         }, 1000);
     }
@@ -56,40 +61,46 @@ public class PaparaPaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         waitingForResult = true;
-        PaparaPayment payment = getIntent().getExtras().getParcelable("data");
-        if (payment != null) {
-            startPaparaApp(payment);
+        PaparaSendMoney sendMoney = getIntent().getExtras().getParcelable("data");
+        PaparaPayment payment = getIntent().getExtras().getParcelable("payment");
+        String type = getIntent().getExtras().getString("type");
+        if (sendMoney != null) {
+            startPaparaApp(sendMoney);
+        } else if (type != null) {
+            startPaparaAppForAccountNumber();
+        } else if (payment != null) {
+            startPaparaAppForPayment(payment);
         } else {
             waitingForResult = false;
             String message = getString(R.string.validation_payment_model);
             int code = VALID_MODEL;
             Papara.getInstance().getPaparaCallback().onFailure(message, code);
-            PaparaLogger.writeErrorLog("You have to send a valid PaparaPayment model to SDK");
+            PaparaLogger.writeErrorLog("You have to send a valid PaparaSendMoney model to SDK");
             finish();
         }
     }
 
 
-    private void startPaparaApp(PaparaPayment paparaPayment) {
+    private void startPaparaApp(PaparaSendMoney paparaSendMoney) {
         //Set Device & App Related Info
-        PaparaPaymentContainer paparaPaymentContainer = new PaparaPaymentContainer();
-        paparaPaymentContainer.setPaparaPayment(paparaPayment);
-        paparaPaymentContainer.setAppBuild("" + Papara.getInstance().getPackageInfo().versionCode);
-        paparaPaymentContainer.setAppVersion(Papara.getInstance().getPackageInfo().versionName);
-        paparaPaymentContainer.setBrand(Build.BRAND);
-        paparaPaymentContainer.setModel(Build.MODEL);
-        paparaPaymentContainer.setOsVersion(Build.VERSION.RELEASE);
-        paparaPaymentContainer.setPackageName(Papara.getInstance().getPackageName());
-        paparaPaymentContainer.setSdkVersion(PaparaSdkVersion.BUILD);
-        paparaPaymentContainer.setAppId(Papara.appId);
-        paparaPaymentContainer.setDisplayName(getApplicationName());
+        PaparaModelContainer paparaModelContainer = new PaparaModelContainer();
+        paparaModelContainer.setPaparaSendMoney(paparaSendMoney);
+        paparaModelContainer.setAppBuild("" + Papara.getInstance().getPackageInfo().versionCode);
+        paparaModelContainer.setAppVersion(Papara.getInstance().getPackageInfo().versionName);
+        paparaModelContainer.setBrand(Build.BRAND);
+        paparaModelContainer.setModel(Build.MODEL);
+        paparaModelContainer.setOsVersion(Build.VERSION.RELEASE);
+        paparaModelContainer.setPackageName(Papara.getInstance().getPackageName());
+        paparaModelContainer.setSdkVersion(PaparaSdkVersion.BUILD);
+        paparaModelContainer.setAppId(Papara.appId);
+        paparaModelContainer.setDisplayName(getApplicationName());
 
-        if (checkMultipleOccurances(paparaPayment.getAmount(), ",") && checkMultipleOccurances(paparaPayment.getAmount(), ".")) {
+        if (checkMultipleOccurances(paparaSendMoney.getAmount(), ",") && checkMultipleOccurances(paparaSendMoney.getAmount(), ".")) {
             try {
-                Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaPaymentContainer));
+                Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaModelContainer, paparaSendMoney.getType()));
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(UriHelper.objectToUri(paparaPaymentContainer));
+                intent.setData(UriHelper.objectToUri(paparaModelContainer, paparaSendMoney.getType()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 waitingForResult = true;
@@ -110,6 +121,67 @@ public class PaparaPaymentActivity extends AppCompatActivity {
         }
     }
 
+    private void startPaparaAppForAccountNumber() {
+        //Set Device & App Related Info
+        PaparaModelContainer paparaModelContainer = new PaparaModelContainer();
+        paparaModelContainer.setAppBuild("" + Papara.getInstance().getPackageInfo().versionCode);
+        paparaModelContainer.setAppVersion(Papara.getInstance().getPackageInfo().versionName);
+        paparaModelContainer.setBrand(Build.BRAND);
+        paparaModelContainer.setModel(Build.MODEL);
+        paparaModelContainer.setOsVersion(Build.VERSION.RELEASE);
+        paparaModelContainer.setPackageName(Papara.getInstance().getPackageName());
+        paparaModelContainer.setSdkVersion(PaparaSdkVersion.BUILD);
+        paparaModelContainer.setAppId(Papara.appId);
+        paparaModelContainer.setDisplayName(getApplicationName());
+
+        try {
+            Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaModelContainer, TYPE_FETC_ACCOUNT_NUM));
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(UriHelper.objectToUri(paparaModelContainer, TYPE_FETC_ACCOUNT_NUM));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            waitingForResult = true;
+        } catch (Exception ex) {
+            waitingForResult = false;
+            ex.printStackTrace();
+            showAppDialog();
+        }
+
+        setResultHandler();
+    }
+
+    private void startPaparaAppForPayment(PaparaPayment paparaPayment) {
+        //Set Device & App Related Info
+        PaparaModelContainer paparaModelContainer = new PaparaModelContainer();
+        paparaModelContainer.setPaparaPayment(paparaPayment);
+        paparaModelContainer.setAppBuild("" + Papara.getInstance().getPackageInfo().versionCode);
+        paparaModelContainer.setAppVersion(Papara.getInstance().getPackageInfo().versionName);
+        paparaModelContainer.setBrand(Build.BRAND);
+        paparaModelContainer.setModel(Build.MODEL);
+        paparaModelContainer.setOsVersion(Build.VERSION.RELEASE);
+        paparaModelContainer.setPackageName(Papara.getInstance().getPackageName());
+        paparaModelContainer.setSdkVersion(PaparaSdkVersion.BUILD);
+        paparaModelContainer.setAppId(Papara.appId);
+        paparaModelContainer.setDisplayName(getApplicationName());
+
+        try {
+            Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaModelContainer, TYPE_PAYMENT));
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(UriHelper.objectToUri(paparaModelContainer, TYPE_PAYMENT));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            waitingForResult = true;
+        } catch (Exception ex) {
+            waitingForResult = false;
+            ex.printStackTrace();
+            showAppDialog();
+        }
+
+        setResultHandler();
+    }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -117,9 +189,20 @@ public class PaparaPaymentActivity extends AppCompatActivity {
         int result = intent.getExtras().getInt("result");
         String message = intent.getExtras().getString("message", "");
         int code = intent.getExtras().getInt("code", 0);
+        String accountNumber = null;
+        if (intent.getExtras().containsKey("accountNumber")) {
+            accountNumber = intent.getExtras().getString("accountNumber", "");
+        }
         switch (result) {
             case Papara.PAYMENT_SUCCESS:
-                Papara.getInstance().getPaparaCallback().onSuccess(message, code);
+                if (Papara.getInstance().getPaparaCallback() instanceof PaparaAccountNumberCallback) {
+                    ((PaparaAccountNumberCallback) Papara.getInstance().getPaparaCallback()).onSuccess(message, code, accountNumber);
+                } else if (Papara.getInstance().getPaparaCallback() instanceof PaparaSendMoneyCallback) {
+                    ((PaparaSendMoneyCallback) Papara.getInstance().getPaparaCallback()).onSuccess(message, code);
+                } else if (Papara.getInstance().getPaparaCallback() instanceof PaparaPaymentCallback) {
+                    ((PaparaPaymentCallback) Papara.getInstance().getPaparaCallback()).onSuccess(message, code);
+                }
+
                 PaparaLogger.writeInfoLog("Result: Sucess");
                 break;
             case Papara.PAYMENT_FAIL:

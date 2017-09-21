@@ -1,19 +1,18 @@
 # Papara Android SDK
 
-[![GitHub license](https://img.shields.io/github/license/dcendents/android-maven-gradle-plugin.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 ![](https://img.shields.io/badge/platform-android-green.svg)
 ![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)
 ![](https://img.shields.io/badge/Gradle-v2.2.1-red.svg)
 
 
 
-To use  **Papara Android SDK**, you have to communicate with us through http://papara.com/iletisim .
+To use **Papara Android SDK**, you have to communicate with us through http://papara.com/iletisim .
 
 
 ## Requirements
 
-- Android  4.1+
-- Android Studio 1.0.0+
+- Android 4.1+
+- Android Studio 2.0.0+
 - JDK 1.8+
 
 
@@ -35,7 +34,7 @@ You can use **Gradle** to add the library as **"aar"**  dependency to your build
 ![](https://img.shields.io/badge/Gradle-v2.2.1-red.svg)
 ```groovy
 dependencies {
-    compile 'com.mobillium.paparasdk:papara-sdk:1.+'
+    compile 'com.mobillium.paparasdk:papara-sdk:2.+'
 }
 ```
 
@@ -84,28 +83,132 @@ import com.mobillium.paparasdk.Papara;
 Papara.sdkInitialize(getApplicationContext(), "APP_ID", SANDBOX_MODE);
 ```
 
-### Payment Model
+### Get Papara Account Number
 
-After initialising Papara SDK, you need to create a Payment Model before starting payment process like below.
+After initialising Papara SDK correctly, you need to call **getAccountNumber()** method to start fetching Papara account number process.
+
+If getting process **completed** successfully (without any error), **onSuccess()** method will be called with **accountNumber** info.
+
+If getting process **interrupted** with an error, **onError()** method will be called.
+
+If getting process **cancelled** by user, **onCancel()** method will be called.
+
+
+
+```java
+import com.mobillium.paparasdk.Papara;
+import com.mobillium.paparasdk.utils.PaparaAccountNumberCallback;
+
+Papara.getInstance().getAccountNumber(MainActivity.this, new PaparaAccountNumberCallback() {
+    @Override
+    public void onSuccess(String message, int code, String accountNumber) {
+        //Getting Successful
+        Toast.makeText(MainActivity.this, "Success " + accountNumber, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFailure(String message, int code) {
+        //Getting Failed
+        showResultDialog(message, code);
+        Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+
+     }
+
+     @Override
+     public void onCancel(String message, int code) {
+         //Getting Cancelled by user
+         showResultDialog(message, code);
+         Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+      }
+});
+
+```
+
+
+### Send Money Model
+
+After initialising Papara SDK, you need to create a Send Money Model before starting payment process like below.
 
 ###### Parameters: 
-* Wallet Number
-* Payment Amount
-* Description
+* Receiver (Phone Number / E-mail / Papara Number)
+* Money Amount
+* Send Type (Phone Number / E-mail / Papara Number)
+
+```java
+import com.mobillium.paparasdk.Papara;
+import com.mobillium.paparasdk.models.PaparaSendMoney;
+import static com.mobillium.paparasdk.utils.UriHelper.TYPE_SEND_ACCOUNT;
+import static com.mobillium.paparasdk.utils.UriHelper.TYPE_SEND_MAIL;
+import static com.mobillium.paparasdk.utils.UriHelper.TYPE_SEND_PHONE;
+
+PaparaSendMoney sendMoneyModel = new PaparaSendMoney();
+sendMoneyModel.setReceiver("5551234567");
+sendMoneyModel.setAmount("1.0");
+sendMoneyModel.setType(TYPE_SEND_PHONE);
+```
+
+### Starting Send Money Process
+
+After creating payment model correctly, you need to call **sendMoney()** method to start sending process.
+
+If sending process **completed** successfully (without any error), **onSuccess()** method will be called.
+
+If sending process **interrupted** with an error, **onError()** method will be called.
+
+If sending process **cancelled** by user, **onCancel()** method will be called.
+
+
+
+```java
+import com.mobillium.paparasdk.Papara;
+import com.mobillium.paparasdk.models.PaparaPayment;
+import com.mobillium.paparasdk.utils.PaparaSendMoneyCallback;
+
+Papara.getInstance().sendMoney(MainActivity.this, sendMoney, new PaparaSendMoneyCallback() {
+    @Override
+    public void onSuccess(String message, int code) {
+        //Sending Money Successfull
+        showResultDialog(message, code);
+        Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
+     }
+
+     @Override
+     public void onFailure(String message, int code) {
+        //Sending Money Failed
+        showResultDialog(message, code);
+        Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+
+      }
+
+      @Override
+      public void onCancel(String message, int code) {
+          //Sending Money Cancelled by user
+          showResultDialog(message, code);
+          Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+      }
+});
+```
+
+### Starting Payment Process
+
+Firstly, you need make an API request with specific parameters for getting **PaymentResponse** model to start payment process.
+
+Secondly, you need to create a **PaparaPayment** model by using result of the API request. PaparaPayment model needs 3 parameters
+- Payment Id
+- Payment URL 
+- Returning Redirect URL
 
 ```java
 import com.mobillium.paparasdk.Papara;
 import com.mobillium.paparasdk.models.PaparaPayment;
 
-PaparaPayment paymentModel = new PaparaPayment();
-paymentModel.setWalletId("ML9433183768");
-paymentModel.setAmount("1.0");
-paymentModel.setDesc("description");
+PaparaPayment paparaPayment = new PaparaPayment();
+paparaPayment.setPaymentId(result.getId());
+paparaPayment.setPaymentUrl(result.getPaymentUrl());
+paparaPayment.setReturningRedirectUrl(result.getReturningRedirectUrl());
+
 ```
-
-### Starting Payment Process
-
-After creating payment model correctly, you need to call **startPayment()** method to start payment process.
+Finally, you need to call **makePayment()** method for starting payment process.
 
 If payment process **completed** successfully (without any error), **onSuccess()** method will be called.
 
@@ -117,42 +220,42 @@ If payment process **cancelled** by user, **onCancel()** method will be called.
 
 ```java
 import com.mobillium.paparasdk.Papara;
-import com.mobillium.paparasdk.models.PaparaPayment;
-import com.mobillium.paparasdk.utils.PaparaSendMoneyCallback;
+import com.mobillium.paparasdk.utils.PaparaPaymentCallback;
 
-    Papara.getInstance().sendMoney(MainActivity.this, payment, new PaparaCallback() {
-          @Override
-          public void onSuccess(String message, int code) {
-              //Payment Successful
-              showResultDialog(message, code);
-              Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
-          }
+Papara.getInstance().makePayment(MainActivity.this, paparaPayment, new PaparaPaymentCallback() {
+    @Override
+    public void onSuccess(String message, int code) {
+        //Payment Successfull
+        showResultDialog(message, code);
+        Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
+     }
 
-          @Override
-          public void onFailure(String message, int code) {
-              //Payment Failed
-              showResultDialog(message, code);
-              Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+     @Override
+     public void onFailure(String message, int code) {
+        //Payment Failed
+        showResultDialog(message, code);
+        Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
 
-          }
+      }
 
-          @Override
-          public void onCancel(String message, int code) {
-              //Payment Cancelled by user
-              showResultDialog(message, code);
-              Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
-              }
-       });
+      @Override
+      public void onCancel(String message, int code) {
+          //Payment Cancelled by user
+          showResultDialog(message, code);
+          Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+      }
+});
 ```
+
 Result **messages** and result **codes** will be returned to your app. You can use these default messages or override the messages according to result codes. Web API related result codes can be requested through http://papara.com/iletisim.
 
 Papara SDK related static result codes:
 
- - **0** : Transaction Cancelled by User 
+ - **0** : Process Cancelled by User 
  - **-1** : An Unexpected Error(Out of any case) 
- - **-2** : Null Payment Model 
- - **-3** : Invalid Payment Amount Format
- - **-4** : Papara App is not intalled on device 
+ - **-2** : Null Payment/Send Money Model 
+ - **-3** : Invalid Money Amount Format
+ - **-4** : Papara App is not installed on device 
 
 ### Debug Mode
 To enable **debugging logs**, you need to call **setDebugEnabled(boolean)** method.
@@ -161,21 +264,5 @@ Default value is **false**.
 ```java
 import com.mobillium.paparasdk.Papara;
 
-Papara.getInstance().setDebugEnabled(true); // or false for disable
+Papara.getInstance().setDebugEnabled(true); // or set false for disabling
 ```
-
-
-License
-====================
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.

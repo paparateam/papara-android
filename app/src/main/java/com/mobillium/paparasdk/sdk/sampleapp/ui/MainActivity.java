@@ -115,14 +115,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Papara.getInstance().sendMoney(MainActivity.this, sendMoney, new PaparaSendMoneyCallback() {
                         @Override
                         public void onSuccess(String message, int code) {
-                            //Payment Successfull
+                            //Sending Money Successfull
                             showResultDialog(message, code);
                             Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onFailure(String message, int code) {
-                            //Payment Failed
+                            //Sending Money Failed
                             showResultDialog(message, code);
                             Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
 
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         @Override
                         public void onCancel(String message, int code) {
-                            //Payment Cancelled by user
+                            //Sending Money Cancelled by user
                             showResultDialog(message, code);
                             Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
                         }

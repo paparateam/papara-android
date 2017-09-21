@@ -10,8 +10,8 @@
         android:id="@+id/llMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bgGreyLight"
         android:animateLayoutChanges="true"
+        android:background="@color/bgGreyLight"
         android:orientation="vertical"
         android:padding="15dp">
 
@@ -95,7 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@drawable/button_bg"
+            android:background="@drawable/bg_gradient"
+            android:foreground="@drawable/flat_button_dark"
             android:text="GÖNDER"
             android:textColor="@color/white"
             android:textSize="16sp" />

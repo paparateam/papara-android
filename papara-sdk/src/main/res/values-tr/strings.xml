@@ -6,6 +6,7 @@
     <string name="not_installed">Yüklemekten Vazgeçildi</string>
     <string name="install_now">Yükle</string>
     <string name="cancel">Vazgeç</string>
+    <string name="continue_">Devam Et</string>
     <string name="done">Tamam</string>
     <string name="validation_payment_model">You have to send a valid PaparaPayment model to SDK</string>
     <string name="validation_format">Please check your amount input format.</string>

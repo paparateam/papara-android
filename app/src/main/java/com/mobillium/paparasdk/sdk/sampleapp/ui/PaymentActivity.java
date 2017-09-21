@@ -31,9 +31,6 @@ public class PaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-        Papara.sdkInitialize(getApplicationContext(), "87826504", false);
-        Papara.getInstance().setDebugEnabled(false);
-
         etAmount = findViewById(R.id.etAmount);
 
 
@@ -47,38 +44,16 @@ public class PaymentActivity extends AppCompatActivity {
         });
     }
 
-    private void showResultDialog(final String message, int code) {
-
-        try {
-            final AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle(getString(com.mobillium.paparasdk.R.string.title))
-                    .setMessage(message + " (" + code + ")")
-                    .setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    })
-                    .create();
-
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private void paymentRequest() {
 
-        PaymentRequest cardAddRequest = new PaymentRequest(etAmount.getText().toString().trim(),"123456789","Test payment","https://www.paparamerchant.com/ipn","https://www.paparamerchant.com/checkout");
+        PaymentRequest cardAddRequest = new PaymentRequest(etAmount.getText().toString().trim().replace("\\,","\\."),"123456789","Test payment","https://www.paparamerchant.com/ipn","https://www.paparamerchant.com/checkout");
         ServiceOperations.makeRequest(PaymentActivity.this, new RequestModel(Request.Method.POST, "payments", "Loading...", cardAddRequest), new ServiceCallback<PaymentResponse>() {
             @Override
             public void success(PaymentResponse result) {
                 PaparaPayment paparaPayment = new PaparaPayment();
-                paparaPayment.setPayment_id(result.getId());
-                paparaPayment.setPaymentUrl(result.getRedirectUrl());
-                paparaPayment.setPaymentAmount(result.getAmount());
+                paparaPayment.setPaymentId(result.getId());
+                paparaPayment.setPaymentUrl(result.getPaymentUrl());
+                paparaPayment.setReturningRedirectUrl(result.getReturningRedirectUrl());
                 Papara.getInstance().makePayment(PaymentActivity.this, paparaPayment, new PaparaPaymentCallback() {
                     @Override
                     public void onSuccess(String message, int code) {
@@ -111,6 +86,28 @@ public class PaymentActivity extends AppCompatActivity {
             }
         }, new TypeToken<BaseResponse<PaymentResponse>>() {
         });
+    }
+
+    private void showResultDialog(final String message, int code) {
+
+        try {
+            final AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(getString(com.mobillium.paparasdk.R.string.title))
+                    .setMessage(message + " (" + code + ")")
+                    .setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create();
+
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

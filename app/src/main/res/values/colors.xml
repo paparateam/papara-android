@@ -7,6 +7,8 @@
     <color name="textGrey">#333</color>
     <color name="textGreyLight">#888</color>
     <color name="bgGreyLight">#EEE</color>
-    <color name="paparaPink">#e2565e</color>
-    <color name="paparaPinkDark">#ac4147</color>
+    <color name="paparaPink">#d13d61</color>
+    <color name="paparaPinkDark">#a32f4b</color>
+
+    <color name="black_alpha">#2000</color>
 </resources>

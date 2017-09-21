@@ -39,8 +39,8 @@ public class UriHelper {
         }
         //Payment Model Related
         if (paparaPayment != null) {
-            if (!TextUtils.isEmpty(paparaPayment.getPayment_id())) {
-                uriString += "payment_id=" + paparaPayment.getPayment_id();
+            if (!TextUtils.isEmpty(paparaPayment.getPaymentId())) {
+                uriString += "payment_id=" + paparaPayment.getPaymentId();
             }
             if (!TextUtils.isEmpty(paparaPayment.getPaymentUrl())) {
                 uriString += "&paymentUrl=" + paparaPayment.getPaymentUrl();

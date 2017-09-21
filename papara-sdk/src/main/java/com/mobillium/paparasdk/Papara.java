@@ -37,7 +37,6 @@ public class Papara {
     public static final int VALID_FORMAT = -3;
     public static final int VALID_NOT_INSTALLED = -4;
 
-
     PaparaCallback paparaCallback;
 
 

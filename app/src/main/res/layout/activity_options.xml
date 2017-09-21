@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.mobillium.paparasdk.sdk.sampleapp.ui.OptionsActivity">
 
     <Button
@@ -13,7 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/paparaPink"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/bg_gradient"
+        android:foreground="@drawable/flat_button_dark"
         android:text="Hesap Numarası"
         android:textColor="@color/white" />
 
@@ -21,8 +24,11 @@
         android:id="@+id/buttonSend"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/paparaPink"
+        android:background="@drawable/bg_gradient"
+        android:foreground="@drawable/flat_button_dark"
         android:text="Para Gönder"
         android:textColor="@color/white" />
 
@@ -31,8 +37,11 @@
         android:id="@+id/buttonPayment"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/paparaPink"
+        android:background="@drawable/bg_gradient"
+        android:foreground="@drawable/flat_button_dark"
         android:text="Ödeme Yap"
         android:textColor="@color/white" />
 </LinearLayout>

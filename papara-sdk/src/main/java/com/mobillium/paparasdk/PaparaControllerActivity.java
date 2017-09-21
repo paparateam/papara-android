@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +20,9 @@ import com.mobillium.paparasdk.utils.PaparaPaymentCallback;
 import com.mobillium.paparasdk.utils.PaparaSendMoneyCallback;
 import com.mobillium.paparasdk.utils.UriHelper;
 
+import static com.mobillium.paparasdk.Papara.PAYMENT_CANCEL;
+import static com.mobillium.paparasdk.Papara.PAYMENT_FAIL;
+import static com.mobillium.paparasdk.Papara.PAYMENT_SUCCESS;
 import static com.mobillium.paparasdk.Papara.VALID_FORMAT;
 import static com.mobillium.paparasdk.Papara.VALID_MODEL;
 import static com.mobillium.paparasdk.Papara.VALID_NOT_INSTALLED;
@@ -98,7 +102,6 @@ public class PaparaControllerActivity extends AppCompatActivity {
         if (checkMultipleOccurances(paparaSendMoney.getAmount(), ",") && checkMultipleOccurances(paparaSendMoney.getAmount(), ".")) {
             try {
                 Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaModelContainer, paparaSendMoney.getType()));
-
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(UriHelper.objectToUri(paparaModelContainer, paparaSendMoney.getType()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -107,7 +110,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
             } catch (Exception ex) {
                 waitingForResult = false;
                 ex.printStackTrace();
-                showAppDialog();
+                showAppDialog(null);
             }
 
             setResultHandler();
@@ -136,7 +139,6 @@ public class PaparaControllerActivity extends AppCompatActivity {
 
         try {
             Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaModelContainer, TYPE_FETC_ACCOUNT_NUM));
-
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(UriHelper.objectToUri(paparaModelContainer, TYPE_FETC_ACCOUNT_NUM));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -145,7 +147,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
         } catch (Exception ex) {
             waitingForResult = false;
             ex.printStackTrace();
-            showAppDialog();
+            showAppDialog(null);
         }
 
         setResultHandler();
@@ -167,7 +169,6 @@ public class PaparaControllerActivity extends AppCompatActivity {
 
         try {
             Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaModelContainer, TYPE_PAYMENT));
-
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(UriHelper.objectToUri(paparaModelContainer, TYPE_PAYMENT));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -176,7 +177,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
         } catch (Exception ex) {
             waitingForResult = false;
             ex.printStackTrace();
-            showAppDialog();
+            showAppDialog(paparaPayment);
         }
 
         setResultHandler();
@@ -209,7 +210,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
                 Papara.getInstance().getPaparaCallback().onFailure(message, code);
                 PaparaLogger.writeInfoLog("Result: Failure");
                 break;
-            case Papara.PAYMENT_CANCEL:
+            case PAYMENT_CANCEL:
                 Papara.getInstance().getPaparaCallback().onCancel(message, code);
                 PaparaLogger.writeInfoLog("Result: Cancel");
                 break;
@@ -248,7 +249,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
         return true;
     }
 
-    private void showAppDialog() {
+    private void showAppDialog(final Parcelable data) {
 
 
         String message = getString(R.string.install_papara);
@@ -283,6 +284,15 @@ public class PaparaControllerActivity extends AppCompatActivity {
                     finish();
                 }
             });
+
+            if (data != null) {
+                dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.continue_), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivityForResult(new Intent(PaparaControllerActivity.this, PaparaWebViewActivity.class).putExtra("data", data), 345);
+                        waitingForResult = false;
+                    }
+                });
+            }
         } else {
             //add two buttons if Sandbox mode off
             dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.install_now), new DialogInterface.OnClickListener() {
@@ -295,18 +305,46 @@ public class PaparaControllerActivity extends AppCompatActivity {
                     finish();
                 }
             });
-            dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    String msg = getString(R.string.not_installed);
-                    final int code = VALID_NOT_INSTALLED;
-                    Papara.getInstance().getPaparaCallback().onFailure(msg, code);
-                    PaparaLogger.writeInfoLog("Result: Papara App not Installed");
-                    finish();
-                }
-            });
+            if (data != null) {
+                dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.continue_), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivityForResult(new Intent(PaparaControllerActivity.this, PaparaWebViewActivity.class).putExtra("data", data), 345);
+                        waitingForResult = false;
+                    }
+                });
+            } else {
+                dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String msg = getString(R.string.not_installed);
+                        final int code = VALID_NOT_INSTALLED;
+                        Papara.getInstance().getPaparaCallback().onFailure(msg, code);
+                        PaparaLogger.writeInfoLog("Result: Papara App not Installed");
+                        finish();
+                    }
+                });
+
+
+            }
         }
 
+        waitingForResult = true;
         dialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 345) {
+            if (resultCode == PAYMENT_CANCEL) {
+                Papara.getInstance().getPaparaCallback().onCancel(data.getExtras().getString("message"), resultCode);
+                PaparaLogger.writeInfoLog("Result: Cancel");
+            } else if (resultCode == PAYMENT_FAIL) {
+                Papara.getInstance().getPaparaCallback().onFailure(data.getExtras().getString("message"), resultCode);
+                PaparaLogger.writeInfoLog("Result: Failure");
+            } else if (resultCode == PAYMENT_SUCCESS) {
+                ((PaparaPaymentCallback) Papara.getInstance().getPaparaCallback()).onSuccess(data.getExtras().getString("message"), resultCode);
+            }
+        }
     }
 
     private void goToApp() {

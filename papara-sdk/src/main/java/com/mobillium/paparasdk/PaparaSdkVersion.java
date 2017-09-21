@@ -1,5 +1,5 @@
 package com.mobillium.paparasdk;
 
 final class PaparaSdkVersion {
-    public static final String BUILD = "1.0.1";
+    public static final String BUILD = "2.0.0";
 }

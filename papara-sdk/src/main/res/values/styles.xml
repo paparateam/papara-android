@@ -10,4 +10,13 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="AppWebTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#d03b63</item>
+        <item name="colorPrimaryDark">#d03b63</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
 </resources>

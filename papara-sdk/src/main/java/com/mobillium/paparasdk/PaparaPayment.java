@@ -11,22 +11,17 @@ public class PaparaPayment implements Parcelable {
 
     private String payment_id;
     private String paymentUrl;
-    private String paymentAmount;
+    private String returningRedirectUrl;
 
     public PaparaPayment() {
     }
 
-    public PaparaPayment(String payment_id, String paymentUrl, String paymentAmount) {
-        this.payment_id = payment_id;
-        this.paymentUrl = paymentUrl;
-        this.paymentAmount = paymentAmount;
-    }
 
-    public String getPayment_id() {
+    public String getPaymentId() {
         return payment_id;
     }
 
-    public void setPayment_id(String payment_id) {
+    public void setPaymentId(String payment_id) {
         this.payment_id = payment_id;
     }
 
@@ -38,18 +33,18 @@ public class PaparaPayment implements Parcelable {
         this.paymentUrl = paymentUrl;
     }
 
-    public String getPaymentAmount() {
-        return paymentAmount;
+    public String getReturningRedirectUrl() {
+        return returningRedirectUrl;
     }
 
-    public void setPaymentAmount(String paymentAmount) {
-        this.paymentAmount = paymentAmount;
+    public void setReturningRedirectUrl(String returningRedirectUrl) {
+        this.returningRedirectUrl = returningRedirectUrl;
     }
 
     protected PaparaPayment(Parcel in) {
         payment_id = in.readString();
         paymentUrl = in.readString();
-        paymentAmount = in.readString();
+        returningRedirectUrl = in.readString();
     }
 
     @Override
@@ -61,7 +56,7 @@ public class PaparaPayment implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(payment_id);
         dest.writeString(paymentUrl);
-        dest.writeString(paymentAmount);
+        dest.writeString(returningRedirectUrl);
     }
 
     @SuppressWarnings("unused")

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,7 +32,14 @@ import static com.mobillium.paparasdk.utils.UriHelper.TYPE_PAYMENT;
 
 public class PaparaControllerActivity extends AppCompatActivity {
 
+    public static final String EXTRA_DATA = "data";
+    public static final String EXTRA_PAYMENT = "payment";
+    public static final String EXTRA_TYPE = "type";
+
     boolean waitingForResult = false;
+    PaparaSendMoney sendMoney;
+    PaparaPayment payment;
+    String type;
 
     @Override
     protected void onResume() {
@@ -65,9 +73,17 @@ public class PaparaControllerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         waitingForResult = true;
-        PaparaSendMoney sendMoney = getIntent().getExtras().getParcelable("data");
-        PaparaPayment payment = getIntent().getExtras().getParcelable("payment");
-        String type = getIntent().getExtras().getString("type");
+
+        if (savedInstanceState != null) {
+            sendMoney   = savedInstanceState.getParcelable(EXTRA_DATA);
+            payment     = savedInstanceState.getParcelable(EXTRA_PAYMENT);
+            type        = savedInstanceState.getString(EXTRA_TYPE);
+        } else {
+            sendMoney = getIntent().getExtras().getParcelable(EXTRA_DATA);
+            payment = getIntent().getExtras().getParcelable(EXTRA_PAYMENT);
+            type = getIntent().getExtras().getString(EXTRA_TYPE);
+        }
+
         if (sendMoney != null) {
             startPaparaApp(sendMoney);
         } else if (type != null) {
@@ -78,7 +94,9 @@ public class PaparaControllerActivity extends AppCompatActivity {
             waitingForResult = false;
             String message = getString(R.string.validation_payment_model);
             int code = VALID_MODEL;
-            Papara.getInstance().getPaparaCallback().onFailure(message, code);
+            if(Papara.getInstance().getPaparaCallback() != null) {
+                Papara.getInstance().getPaparaCallback().onFailure(message, code);
+            }
             PaparaLogger.writeErrorLog("You have to send a valid PaparaSendMoney model to SDK");
             finish();
         }
@@ -376,5 +394,13 @@ public class PaparaControllerActivity extends AppCompatActivity {
         ApplicationInfo applicationInfo = Papara.applicationContext.getApplicationInfo();
         int stringId = applicationInfo.labelRes;
         return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : Papara.applicationContext.getString(stringId);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putParcelable(EXTRA_DATA, sendMoney);
+        outState.putParcelable(EXTRA_PAYMENT, payment);
+        outState.putString(EXTRA_TYPE, type);
     }
 }

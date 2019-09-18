@@ -42,7 +42,7 @@ Add it in your root build.gradle at the end of repositories for v2.0.2:
 
 ```groovy
     dependencies {
-	        implementation 'com.github.paparateam:papara-android:v2.0.2'
+	        implementation 'com.github.paparateam:papara-android:v2.0.3'
     }
  ```
 

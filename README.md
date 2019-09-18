@@ -2,7 +2,7 @@
 
 ![](https://img.shields.io/badge/platform-android-green.svg)
 ![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)
-![](https://img.shields.io/badge/Gradle-v2.2.1-red.svg)
+[![](https://jitpack.io/v/paparateam/papara-android.svg)](https://jitpack.io/#paparateam/papara-android)
 
 
 
@@ -29,14 +29,23 @@ To use the example application, **Papara SandBox Android**  must be installed on
 ## Setup
 You can use **Gradle** to add the library as **"aar"**  dependency to your build.
 
+Add it in your root build.gradle at the end of repositories for v2.0.2:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
 
 ### Gradle
-![](https://img.shields.io/badge/Gradle-v2.2.1-red.svg)
+
 ```groovy
-dependencies {
-    compile 'com.mobillium.paparasdk:papara-sdk:2.+'
-}
-```
+    dependencies {
+	        implementation 'com.github.paparateam:papara-android:v2.0.2'
+    }
+ ```
+
 
 ## Usage
 

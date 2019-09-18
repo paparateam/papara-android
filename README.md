@@ -29,7 +29,7 @@ To use the example application, **Papara SandBox Android**  must be installed on
 ## Setup
 You can use **Gradle** to add the library as **"aar"**  dependency to your build.
 
-Add it in your root build.gradle at the end of repositories for v2.0.2:
+Add it in your root build.gradle at the end of repositories.
 
 	allprojects {
 		repositories {

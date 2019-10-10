@@ -71,8 +71,11 @@ public class PaparaWebViewActivity extends AppCompatActivity {
 
                 if (checkParams(url, paparaPayment.getReturningRedirectUrl())) {
                     finishSuccess();
+                    return true;
+
                 } else if (checkParamsForFail(url, errorPath)) {
                     finishFail();
+                    return true;
                 }
 
                 return false;

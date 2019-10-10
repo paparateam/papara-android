@@ -71,10 +71,11 @@ public class PaparaWebViewActivity extends AppCompatActivity {
 
                 if (checkParams(url, paparaPayment.getReturningRedirectUrl())) {
                     finishSuccess();
-                }else if (checkParamsForFail(url, errorPath)) {
+                } else if (checkParamsForFail(url, errorPath)) {
                     finishFail();
                 }
-                return true;
+
+                return false;
             }
 
             @Override
@@ -221,6 +222,7 @@ public class PaparaWebViewActivity extends AppCompatActivity {
         PaparaWebViewActivity.this.setResult(PAYMENT_SUCCESS, intent);
         finish();
     }
+
     private void finishFail() {
         Intent intent = new Intent();
         intent.putExtra("message", "Payment failed");

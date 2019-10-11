@@ -75,9 +75,9 @@ public class PaparaControllerActivity extends AppCompatActivity {
         waitingForResult = true;
 
         if (savedInstanceState != null) {
-            sendMoney   = savedInstanceState.getParcelable(EXTRA_DATA);
-            payment     = savedInstanceState.getParcelable(EXTRA_PAYMENT);
-            type        = savedInstanceState.getString(EXTRA_TYPE);
+            sendMoney = savedInstanceState.getParcelable(EXTRA_DATA);
+            payment = savedInstanceState.getParcelable(EXTRA_PAYMENT);
+            type = savedInstanceState.getString(EXTRA_TYPE);
         } else {
             sendMoney = getIntent().getExtras().getParcelable(EXTRA_DATA);
             payment = getIntent().getExtras().getParcelable(EXTRA_PAYMENT);
@@ -94,7 +94,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
             waitingForResult = false;
             String message = getString(R.string.validation_payment_model);
             int code = VALID_MODEL;
-            if(Papara.getInstance().getPaparaCallback() != null) {
+            if (Papara.getInstance().getPaparaCallback() != null) {
                 Papara.getInstance().getPaparaCallback().onFailure(message, code);
             }
             PaparaLogger.writeErrorLog("You have to send a valid PaparaSendMoney model to SDK");
@@ -285,7 +285,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
                     public void onCancel(DialogInterface dialogInterface) {
                         String msg = getString(R.string.not_installed);
                         final int code = VALID_NOT_INSTALLED;
-                        Papara.getInstance().getPaparaCallback().onFailure(msg, code);
+                        Papara.getInstance().getPaparaCallback().onCancel(msg, code);
                         PaparaLogger.writeInfoLog("Result: Papara App not Installed");
                         finish();
                     }
@@ -316,9 +316,6 @@ public class PaparaControllerActivity extends AppCompatActivity {
             dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.install_now), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     goToApp();
-                    String msg = getString(R.string.cancel);
-                    final int code = 0;
-                    Papara.getInstance().getPaparaCallback().onFailure(msg, code);
                     PaparaLogger.writeInfoLog("Result: User clicked to install the App");
                     finish();
                 }

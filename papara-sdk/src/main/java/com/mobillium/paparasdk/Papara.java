@@ -30,7 +30,7 @@ public class Papara {
 
 
     public static final int PAYMENT_SUCCESS = 1;
-    public static final int PAYMENT_FAIL = 0;
+    public static final int PAYMENT_FAIL = -1;
     public static final int PAYMENT_CANCEL = 2;
 
     public static final int VALID_MODEL = -2;

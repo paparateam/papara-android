@@ -39,7 +39,7 @@ import static com.mobillium.paparasdk.sdk.sampleapp.ApplicationClass.getGson;
  */
 
 public class ServiceOperations {
-    private static String baseUrl = "https://merchantapi-test-master.papara.com/";
+    private static String baseUrl = "https://merchant.test.api.papara.com/";
     public static ProgressDialog pd;
     public static final boolean DEBUG = BuildConfig.DEBUG;
 

@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Papara SDK</string>
     <string name="install_papara">Papara uygulamasını yüklemek ister misiniz?</string>
     <string name="install_papara_sandbox">Paparadan para gönderebilmek için Papara SandBox uygulamasını yüklemelisiniz.</string>
     <string name="title">Papara</string>

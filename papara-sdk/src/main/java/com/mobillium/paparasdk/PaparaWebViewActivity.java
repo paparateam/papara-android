@@ -53,12 +53,10 @@ public class PaparaWebViewActivity extends AppCompatActivity {
 
     private void showHTMLPage(String url) {
         webView.setHapticFeedbackEnabled(true);
-        webView.getSettings()
-                .setSupportZoom(true);
-        webView.getSettings()
-                .setJavaScriptEnabled(true);
-        webView.getSettings()
-                .setSaveFormData(false);//Disable AutoSuggestion for webview bug
+        webView.getSettings().setSupportZoom(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setSaveFormData(false);//Disable AutoSuggestion for webview bug
         webView.addJavascriptInterface(new JavaScriptInterface(this), "HTMLOUT");
 
 

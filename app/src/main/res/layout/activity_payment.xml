@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/bgGreyLight"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        style="@style/paparaTextView"
+        android:text="Tutar" />
+
+    <EditText
+        android:id="@+id/etAmount"
+        style="@style/paparaEditText"
+        android:digits="01234567890,."
+        android:hint="Örn: 10,50 veya 10.50"
+        android:inputType="numberDecimal"
+        android:maxLines="1"
+        android:text="1.00" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_gradient"
+        android:foreground="@drawable/flat_button_dark"
+        android:text="ÖDEME YAP"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

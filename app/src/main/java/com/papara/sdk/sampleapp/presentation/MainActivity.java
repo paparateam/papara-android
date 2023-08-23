@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button:
                 if (checkFields()) {
                     PaparaSendMoney sendMoney = new PaparaSendMoney(
-                            getSelectedET().getText().toString().trim(),
                             etAmount.getText().toString().trim(),
+                            getSelectedET().getText().toString().trim(),
                             getSelectedType()
                     );
 

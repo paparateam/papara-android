@@ -69,7 +69,7 @@ After that, append your **APP_ID** to the end of the name value of intent filter
 ```xml
 <application>
     <activity 
-        android:name="com.mobillium.paparasdk.PaparaControllerActivity"
+        android:name="com.papara.sdk.PaparaControllerActivity"
         android:theme="@style/Theme.Transparent"
         android:launchMode="singleTask">
             <intent-filter>

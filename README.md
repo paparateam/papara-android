@@ -87,7 +87,6 @@ You need to initialize Papara SDK before you can use it. Add a call to **Papara.
 **SANDBOX_MODE** : Enable/Disable SandBox mode. (Boolean)
 
 ```java
-import com.mobillium.paparasdk.Papara;
 
 Papara.sdkInitialize(getApplicationContext(), "APP_ID", SANDBOX_MODE);
 ```
@@ -105,8 +104,6 @@ If getting process **cancelled** by user, **onCancel()** method will be called.
 
 
 ```java
-import com.mobillium.paparasdk.Papara;
-import com.mobillium.paparasdk.utils.PaparaAccountNumberCallback;
 
 Papara.getInstance().getAccountNumber(MainActivity.this, new PaparaAccountNumberCallback() {
     @Override
@@ -144,11 +141,6 @@ After initialising Papara SDK, you need to create a Send Money Model before star
 * Send Type (Phone Number / E-mail / Papara Number)
 
 ```java
-import com.mobillium.paparasdk.Papara;
-import com.mobillium.paparasdk.models.PaparaSendMoney;
-import static com.mobillium.paparasdk.utils.UriHelper.TYPE_SEND_ACCOUNT;
-import static com.mobillium.paparasdk.utils.UriHelper.TYPE_SEND_MAIL;
-import static com.mobillium.paparasdk.utils.UriHelper.TYPE_SEND_PHONE;
 
 PaparaSendMoney sendMoneyModel = new PaparaSendMoney();
 sendMoneyModel.setReceiver("5551234567");
@@ -169,9 +161,6 @@ If sending process **cancelled** by user, **onCancel()** method will be called.
 
 
 ```java
-import com.mobillium.paparasdk.Papara;
-import com.mobillium.paparasdk.models.PaparaPayment;
-import com.mobillium.paparasdk.utils.PaparaSendMoneyCallback;
 
 Papara.getInstance().sendMoney(MainActivity.this, sendMoney, new PaparaSendMoneyCallback() {
     @Override
@@ -208,8 +197,6 @@ Secondly, you need to create a **PaparaPayment** model by using result of the AP
 - Returning Redirect URL
 
 ```java
-import com.mobillium.paparasdk.Papara;
-import com.mobillium.paparasdk.models.PaparaPayment;
 
 PaparaPayment paparaPayment = new PaparaPayment();
 paparaPayment.setPaymentId(result.getId());
@@ -228,8 +215,6 @@ If payment process **cancelled** by user, **onCancel()** method will be called.
 
 
 ```java
-import com.mobillium.paparasdk.Papara;
-import com.mobillium.paparasdk.utils.PaparaPaymentCallback;
 
 Papara.getInstance().makePayment(MainActivity.this, paparaPayment, new PaparaPaymentCallback() {
     @Override
@@ -271,7 +256,6 @@ To enable **debugging logs**, you need to call **setDebugEnabled(boolean)** meth
 
 Default value is **false**. 
 ```java
-import com.mobillium.paparasdk.Papara;
 
 Papara.getInstance().setDebugEnabled(true); // or set false for disabling
 ```

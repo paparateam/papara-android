@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -110,7 +109,9 @@ public class PaparaControllerActivity extends AppCompatActivity {
 
         if (checkMultipleOccurrences(paparaSendMoney.getAmount(), ",") && checkMultipleOccurrences(paparaSendMoney.getAmount(), ".")) {
             try {
-                Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaModelContainer, paparaSendMoney.getType()));
+                String uri = "URI: " + UriHelper.objectToUri(paparaModelContainer, paparaSendMoney.getType());
+                PaparaLogger.writeInfoLog(uri);
+
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(UriHelper.objectToUri(paparaModelContainer, paparaSendMoney.getType()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -118,7 +119,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
                 waitingForResult = true;
             } catch (Exception ex) {
                 waitingForResult = false;
-                ex.printStackTrace();
+                PaparaLogger.writeErrorLog(ex.getMessage());
                 showAppDialog(null);
             }
 
@@ -147,7 +148,9 @@ public class PaparaControllerActivity extends AppCompatActivity {
         paparaModelContainer.setDisplayName(getApplicationName());
 
         try {
-            Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaModelContainer, TYPE_FETC_ACCOUNT_NUM));
+            String uri = "URI: " + UriHelper.objectToUri(paparaModelContainer, TYPE_FETC_ACCOUNT_NUM);
+            PaparaLogger.writeInfoLog(uri);
+
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(UriHelper.objectToUri(paparaModelContainer, TYPE_FETC_ACCOUNT_NUM));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -155,7 +158,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
             waitingForResult = true;
         } catch (Exception ex) {
             waitingForResult = false;
-            ex.printStackTrace();
+            PaparaLogger.writeErrorLog(ex.getMessage());
             showAppDialog(null);
         }
 
@@ -177,7 +180,8 @@ public class PaparaControllerActivity extends AppCompatActivity {
         paparaModelContainer.setDisplayName(getApplicationName());
 
         try {
-            Log.d("PAPARA URI", "startPaparaApp: " + UriHelper.objectToUri(paparaModelContainer, TYPE_PAYMENT));
+            String uri = "URI: " + UriHelper.objectToUri(paparaModelContainer, TYPE_PAYMENT);
+            PaparaLogger.writeInfoLog(uri);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(UriHelper.objectToUri(paparaModelContainer, TYPE_PAYMENT));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -185,7 +189,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
             waitingForResult = true;
         } catch (Exception ex) {
             waitingForResult = false;
-            ex.printStackTrace();
+            PaparaLogger.writeErrorLog(ex.getMessage());
             showAppDialog(paparaPayment);
         }
 
@@ -211,17 +215,19 @@ public class PaparaControllerActivity extends AppCompatActivity {
                     ((PaparaSendMoneyCallback) Papara.getInstance().getPaparaCallback()).onSuccess(message, code);
                 } else if (Papara.getInstance().getPaparaCallback() instanceof PaparaPaymentCallback) {
                     ((PaparaPaymentCallback) Papara.getInstance().getPaparaCallback()).onSuccess(message, code);
+                } else {
+                    PaparaLogger.writeInfoLog("Result: PAYMENT_SUCCESS - NO CONDITION ");
                 }
 
-                PaparaLogger.writeInfoLog("Result: Sucess");
+                PaparaLogger.writeInfoLog("Result: PAYMENT_SUCCESS " + message);
                 break;
             case PAYMENT_FAIL:
                 Papara.getInstance().getPaparaCallback().onFailure(message, code);
-                PaparaLogger.writeInfoLog("Result: Failure");
+                PaparaLogger.writeInfoLog("Result: PAYMENT_FAIL " + message);
                 break;
             case PAYMENT_CANCEL:
                 Papara.getInstance().getPaparaCallback().onCancel(message, code);
-                PaparaLogger.writeInfoLog("Result: Cancel");
+                PaparaLogger.writeInfoLog("Result: PAYMENT_CANCEL" + message);
                 break;
 
         }
@@ -251,7 +257,7 @@ public class PaparaControllerActivity extends AppCompatActivity {
         try {
             Double.parseDouble(str.replace(",", "."));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            PaparaLogger.writeErrorLog(ex.getMessage());
             return false;
         }
 
@@ -341,16 +347,28 @@ public class PaparaControllerActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 345) {
+            String message = "";
+            try {
+                message = data.getExtras().getString("message");
+            } catch (Exception ex) {
+                message = "";
+                PaparaLogger.writeErrorLog(ex.getMessage());
+            }
+
             if (resultCode == PAYMENT_CANCEL) {
-                Papara.getInstance().getPaparaCallback().onCancel(data.getExtras().getString("message"), resultCode);
-                PaparaLogger.writeInfoLog("Result: Cancel");
+                PaparaLogger.writeInfoLog("Result: PAYMENT_CANCEL " + message);
+                Papara.getInstance().getPaparaCallback().onCancel(message, resultCode);
             } else if (resultCode == PAYMENT_FAIL) {
-                Papara.getInstance().getPaparaCallback().onFailure(data.getExtras().getString("message"), resultCode);
-                PaparaLogger.writeInfoLog("Result: Failure");
+                PaparaLogger.writeInfoLog("Result: PAYMENT_FAIL " + message);
+                Papara.getInstance().getPaparaCallback().onFailure(message, resultCode);
             } else if (resultCode == PAYMENT_SUCCESS) {
-                ((PaparaPaymentCallback) Papara.getInstance().getPaparaCallback()).onSuccess(data.getExtras().getString("message"), resultCode);
+                PaparaLogger.writeInfoLog("Result: PAYMENT_SUCCESS " + message);
+                ((PaparaPaymentCallback) Papara.getInstance().getPaparaCallback()).onSuccess(message, resultCode);
+            } else {
+                PaparaLogger.writeInfoLog("onActivityResult - NO CONDITION " + message);
             }
         }
+        PaparaLogger.writeInfoLog("onActivityResult - requestCode different");
     }
 
     private void goToApp() {

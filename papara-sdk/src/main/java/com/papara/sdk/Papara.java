@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.papara.sdk.utils.PaparaCallback;
 import com.papara.sdk.utils.PaparaException;
+import com.papara.sdk.utils.PaparaLogger;
 import com.papara.sdk.utils.PaparaSdkNotInitializedException;
 import com.papara.sdk.utils.PaparaSendMoneyCallback;
 
@@ -54,12 +55,14 @@ public class Papara {
             }
             return instance;
         } catch (PaparaSdkNotInitializedException ex) {
+            PaparaLogger.writeSdkErrorLog();
             throw new PaparaSdkNotInitializedException("You must initialize the Papara SDK first");
         }
     }
 
     public String getPackageName() {
         if (applicationContext == null) {
+            PaparaLogger.writeSdkErrorLog();
             throw new PaparaSdkNotInitializedException("You must initialize the Papara SDK first");
         }
         return applicationContext.getPackageName();
@@ -105,7 +108,9 @@ public class Papara {
             return applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0);
 
         } catch (PackageManager.NameNotFoundException ex) {
-            throw new PaparaException("Package Name Not found");
+            String message = "Package Name Not found";
+            PaparaLogger.writeErrorLog(message);
+            throw new PaparaException(message);
         }
     }
 
@@ -124,6 +129,7 @@ public class Papara {
      */
     public void sendMoney(Activity activity, PaparaSendMoney paparaSendMoney, @NonNull final PaparaSendMoneyCallback callback) {
         if (!sdkInitialized) {
+            PaparaLogger.writeSdkErrorLog();
             throw new PaparaSdkNotInitializedException("You must initialize the Papara SDK first");
         }
         this.paparaCallback = callback;
@@ -141,6 +147,7 @@ public class Papara {
      */
     public void getAccountNumber(Activity activity, @NonNull final PaparaCallback callback) {
         if (!sdkInitialized) {
+            PaparaLogger.writeSdkErrorLog();
             throw new PaparaSdkNotInitializedException("You must initialize the Papara SDK first");
         }
         this.paparaCallback = callback;
@@ -190,6 +197,7 @@ public class Papara {
             @NonNull final PaparaCallback callback
     ) {
         if (!sdkInitialized) {
+            PaparaLogger.writeSdkErrorLog();
             throw new PaparaSdkNotInitializedException("You must initialize the Papara SDK first");
         }
 

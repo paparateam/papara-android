@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.papara.sdk.Papara;
 import com.papara.sdk.PaparaSendMoney;
 import com.papara.sdk.sampleapp.R;
+import com.papara.sdk.utils.PaparaLogger;
 import com.papara.sdk.utils.PaparaSendMoneyCallback;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dialog.show();
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            PaparaLogger.writeErrorLog(ex.getMessage());
         }
     }
 }

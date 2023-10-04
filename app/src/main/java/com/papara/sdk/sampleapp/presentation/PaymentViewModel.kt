@@ -2,6 +2,8 @@ package com.papara.sdk.sampleapp.presentation
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.papara.sdk.Papara
 import com.papara.sdk.PaparaPayment
@@ -18,8 +20,13 @@ class PaymentViewModel @Inject constructor(
     private val startPayment: StartPaymentUseCase
 ) : AndroidViewModel(application) {
 
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
     fun startProcess(amount: String, paparaPaymentCallback: PaparaPaymentCallback) {
         viewModelScope.launch {
+            _isLoading.value = true
             startPayment(amount).collect { result ->
                 result.onSuccess { response ->
                     val paparaPayment = PaparaPayment(
@@ -33,8 +40,10 @@ class PaymentViewModel @Inject constructor(
                         paparaPayment,
                         paparaPaymentCallback
                     )
+                    _isLoading.value = false
                 }.onFailure {
                     PaparaLogger.writeErrorLog(it.message)
+                    _isLoading.value = false
                 }
             }
 

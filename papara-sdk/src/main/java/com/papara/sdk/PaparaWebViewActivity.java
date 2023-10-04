@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.UrlQuerySanitizer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -22,6 +21,8 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.papara.sdk.utils.PaparaLogger;
 
 import java.net.URL;
 
@@ -66,8 +67,7 @@ public class PaparaWebViewActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.d("OVERRIDE", "onOverride: " + url);
-
+                PaparaLogger.writeInfoLog("shouldOverrideUrlLoading " + url);
                 if (checkParams(url, paparaPayment.getReturningRedirectUrl())) {
                     finishSuccess();
                     return true;
@@ -84,16 +84,14 @@ public class PaparaWebViewActivity extends AppCompatActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 show();
-
-                Log.d("START", "onPageStarted: " + url);
-
+                PaparaLogger.writeInfoLog("onPageStarted " + url);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
 
                 hide();
-                Log.d("START", "onPagefinished: " + url);
+                PaparaLogger.writeInfoLog("onPageFinished " + url);
                 super.onPageFinished(view, url);
             }
 
@@ -111,8 +109,8 @@ public class PaparaWebViewActivity extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
+                PaparaLogger.writeInfoLog("onProgressChanged " + newProgress);
                 super.onProgressChanged(view, newProgress);
-                Log.d("START", "progressss: " + newProgress);
             }
         });
     }
@@ -138,12 +136,12 @@ public class PaparaWebViewActivity extends AppCompatActivity {
          */
         @JavascriptInterface
         public void processSuccessHTML(String response) {
-            Log.d("TAG_HTML", "processHTML: " + response);
+            PaparaLogger.writeInfoLog("processSuccessHTML " + response);
         }
 
         @JavascriptInterface
         public void processFailHTML(String response) {
-            Log.d("TAG_HTML", "processHTML: " + response);
+            PaparaLogger.writeInfoLog("processFailHTML " + response);
         }
     }
 
@@ -163,13 +161,13 @@ public class PaparaWebViewActivity extends AppCompatActivity {
         try {
             URL fullUrl = new URL(url2);
             String baseUrl = fullUrl.getProtocol() + "://" + fullUrl.getHost() + fullUrl.getPath();
-            Log.d("BASEURL", "checkParams: " + baseUrl);
+            PaparaLogger.writeInfoLog("checkParams " + baseUrl);
 
             if (!url.contains(baseUrl)) {
                 return false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            PaparaLogger.writeErrorLog(e.getMessage());
             return false;
         }
 
@@ -187,7 +185,7 @@ public class PaparaWebViewActivity extends AppCompatActivity {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            PaparaLogger.writeErrorLog(ex.getMessage());
         }
 
         return false;
@@ -197,13 +195,12 @@ public class PaparaWebViewActivity extends AppCompatActivity {
         try {
             URL fullUrl = new URL(url2.toLowerCase());
             String baseUrl = fullUrl.getProtocol() + "://" + fullUrl.getHost() + fullUrl.getPath();
-            Log.d("BASEURL", "checkParams: " + baseUrl);
-
+            PaparaLogger.writeInfoLog("checkParamsForFail " + baseUrl);
             if (!url.contains(baseUrl)) {
                 return false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            PaparaLogger.writeErrorLog(e.getMessage());
             return false;
         }
 

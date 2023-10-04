@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.papara.sdk.sampleapp.R
 import com.papara.sdk.sampleapp.databinding.ActivityMainBinding
+import com.papara.sdk.utils.PaparaLogger
 import com.papara.sdk.utils.PaparaPaymentCallback
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -60,6 +62,10 @@ class PaymentActivity : AppCompatActivity() {
                 }
             )
         }
+
+        viewModel.isLoading.observe(this) {
+            binding.progressBar.isVisible = it
+        }
     }
 
     private fun showResultDialog(message: String, code: Int) {
@@ -76,7 +82,7 @@ class PaymentActivity : AppCompatActivity() {
             dialog.setCanceledOnTouchOutside(false)
             dialog.show()
         } catch (ex: Exception) {
-            ex.printStackTrace()
+            PaparaLogger.writeErrorLog(ex.message)
         }
     }
 }

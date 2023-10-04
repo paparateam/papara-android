@@ -1,6 +1,5 @@
 package com.papara.sdk.sampleapp.presentation;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +8,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.papara.sdk.sampleapp.R;
 import com.papara.sdk.Papara;
+import com.papara.sdk.sampleapp.R;
 import com.papara.sdk.utils.PaparaAccountNumberCallback;
+import com.papara.sdk.utils.PaparaLogger;
 
 public class OptionsActivity extends AppCompatActivity {
 
@@ -74,7 +74,7 @@ public class OptionsActivity extends AppCompatActivity {
             dialog.show();
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            PaparaLogger.writeErrorLog(ex.getMessage());
         }
     }
 }

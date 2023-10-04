@@ -6,7 +6,6 @@ import com.papara.sdk.Papara
 object PaparaLogger {
 
     private const val TAG = "PAPARA_SDK"
-    private const val TAG_PARAMS = "PAPARA_SDK_PARAMS"
 
     @JvmStatic
     fun writeErrorLog(message: String?) {
@@ -25,7 +24,7 @@ object PaparaLogger {
     @JvmStatic
     fun writeResponseLog(message: String?) {
         if (Papara.getInstance().isDebugEnabled) {
-            Log.i(TAG_PARAMS, message.orEmpty())
+            Log.i(TAG, message.orEmpty())
         }
     }
 
@@ -33,6 +32,13 @@ object PaparaLogger {
     fun writeDebugLog(message: String?) {
         if (Papara.getInstance().isDebugEnabled) {
             Log.d(TAG, message.orEmpty())
+        }
+    }
+
+    @JvmStatic
+    fun writeSdkErrorLog() {
+        if (Papara.getInstance().isDebugEnabled) {
+            Log.e(TAG, "You must initialize the Papara SDK first")
         }
     }
 }

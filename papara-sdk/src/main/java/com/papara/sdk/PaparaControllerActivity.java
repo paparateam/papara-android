@@ -207,6 +207,10 @@ public class PaparaControllerActivity extends AppCompatActivity {
         if (intent.getExtras().containsKey("accountNumber")) {
             accountNumber = intent.getExtras().getString("accountNumber", "");
         }
+        PaparaLogger.writeInfoLog("Result: onNewIntent result " + result);
+        PaparaLogger.writeInfoLog("Result: onNewIntent message " + message);
+        PaparaLogger.writeInfoLog("Result: onNewIntent code " + code);
+        PaparaLogger.writeInfoLog("Result: onNewIntent accountNumber " + accountNumber);
         switch (result) {
             case PAYMENT_SUCCESS:
                 if (Papara.getInstance().getPaparaCallback() instanceof PaparaAccountNumberCallback) {

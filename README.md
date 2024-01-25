@@ -136,14 +136,14 @@ Papara.getInstance().getAccountNumber(MainActivity.this, new PaparaAccountNumber
 After initialising Papara SDK, you need to create a Send Money Model before starting payment process like below.
 
 ###### Parameters: 
-* Receiver (Phone Number / E-mail / Papara Number)
+* Receiver (Phone Number / Papara Number)
 * Money Amount
-* Send Type (Phone Number / E-mail / Papara Number)
+* Send Type (Phone Number / Papara Number)
 
 ```java
 
 PaparaSendMoney sendMoneyModel = new PaparaSendMoney();
-sendMoneyModel.setReceiver("5551234567");
+sendMoneyModel.setReceiver("555XXXXXXX");
 sendMoneyModel.setAmount("1.0");
 sendMoneyModel.setType(TYPE_SEND_PHONE);
 ```

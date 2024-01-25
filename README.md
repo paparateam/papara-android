@@ -93,8 +93,9 @@ Papara.sdkInitialize(getApplicationContext(), "APP_ID", SANDBOX_MODE); e.g APP_I
 
 your project's manifest.xml had to intent-filter action name **App+APP_ID**
 
-```xml<action android:name="papara.sdk.action.App1234"/> ```
-
+```xml
+<action android:name="papara.sdk.action.App1234"/>
+```
 
 **SANDBOX_MODE** : Enable/Disable SandBox mode. (Boolean)
 

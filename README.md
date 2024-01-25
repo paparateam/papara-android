@@ -51,8 +51,7 @@ Add it in your root build.gradle at the end of repositories.
 
 ### Application Id
 
-You need a unique **APP_ID** to integrate sdk to your application. You can get it from
-https://www.papara.com/contact
+You need a unique **APP_ID** to integrate sdk to your application. You can generate unique app id for your application.
 
 To use Papara SDK, you need to install Papara Android Application on the same device. If it's not installed, a warning message will be displayed on screen. You can download it from https://play.google.com/store/apps/details?id=com.mobillium.papara 
 
@@ -64,7 +63,7 @@ To use Papara SDK on **Sandbox Mode**, you need to install **Papara Sandbox Andr
 
 Open your project's manifest.xml file and paste the codes below into application block. 
 
-After that, append your **APP_ID** to the end of the name value of intent filter action. For example if your Papara APP_ID is **1234**, the declaration looks like:
+After that, append your **APP_ID** to the end of the name value of intent filter action. For example if you generate Papara APP_ID is **1234**, the declaration looks like:
 
 ```xml
 <application>
@@ -83,6 +82,10 @@ After that, append your **APP_ID** to the end of the name value of intent filter
 
 You need to initialize Papara SDK before you can use it. Add a call to **Papara.sdkInitialize** from onCreate in your Activity class with your **APP_ID**.
 
+**Important**
+
+If you init SDK Papara.sdkInitialize(getApplicationContext(), "1234", true); ("1234" is just demo you can generate your own unique one.)
+your project's manifest.xml had to intent-filter action name <action android:name="papara.sdk.action.App1234"/> like that as above. -> **App+1234(YOUR GENERATED UNIQUE ID)**
 
 **SANDBOX_MODE** : Enable/Disable SandBox mode. (Boolean)
 

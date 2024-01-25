@@ -6,7 +6,7 @@
 
 
 
-To use **Papara Android SDK**, you have to communicate with us through http://papara.com/iletisim .
+To use **Papara Android SDK**, you have to communicate with us through https://www.papara.com/contact .
 
 
 ## Requirements
@@ -52,11 +52,11 @@ Add it in your root build.gradle at the end of repositories.
 ### Application Id
 
 You need a unique **APP_ID** to integrate sdk to your application. You can get it from
-http://papara.com/iletisim/ 
+https://www.papara.com/contact
 
 To use Papara SDK, you need to install Papara Android Application on the same device. If it's not installed, a warning message will be displayed on screen. You can download it from https://play.google.com/store/apps/details?id=com.mobillium.papara 
 
-To use Papara SDK on **Sandbox Mode**, you need to install **Papara Sandbox Android Application** on the same device.  You can get sandbox apk. file by communicating with us through http://papara.com/iletisim .
+To use Papara SDK on **Sandbox Mode**, you need to install **Papara Sandbox Android Application** on the same device.  You can get sandbox apk. file by communicating with us through https://www.papara.com/contact .
 
 
 
@@ -241,7 +241,7 @@ Papara.getInstance().makePayment(MainActivity.this, paparaPayment, new PaparaPay
 });
 ```
 
-Result **messages** and result **codes** will be returned to your app. You can use these default messages or override the messages according to result codes. Web API related result codes can be requested through http://papara.com/iletisim.
+Result **messages** and result **codes** will be returned to your app. You can use these default messages or override the messages according to result codes. Web API related result codes can be requested through https://www.papara.com/contact .
 
 Papara SDK related static result codes:
 

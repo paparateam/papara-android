@@ -84,8 +84,17 @@ You need to initialize Papara SDK before you can use it. Add a call to **Papara.
 
 **Important**
 
-If you init SDK Papara.sdkInitialize(getApplicationContext(), "1234", true); ("1234" is just demo you can generate your own unique one.)
-your project's manifest.xml had to intent-filter action name <action android:name="papara.sdk.action.App1234"/> like that as above. -> **App+1234(YOUR GENERATED UNIQUE ID)**
+If you initialize Papara SDK like below;
+
+```java
+
+Papara.sdkInitialize(getApplicationContext(), "APP_ID", SANDBOX_MODE); e.g APP_ID = 1234 
+```
+
+your project's manifest.xml had to intent-filter action name **App+APP_ID**
+
+```xml<action android:name="papara.sdk.action.App1234"/> ```
+
 
 **SANDBOX_MODE** : Enable/Disable SandBox mode. (Boolean)
 

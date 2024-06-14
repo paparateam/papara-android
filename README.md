@@ -202,7 +202,55 @@ Papara.getInstance().sendMoney(MainActivity.this, sendMoney, new PaparaSendMoney
 
 ### Starting Payment Process
 
-Firstly, you need make an API request with specific parameters for getting **PaymentResponse** model to start payment process.
+Firstly, you need make an API request with specific parameters for getting **PaymentResponse** model to start payment process. To Create API payment log check documentation [here](https://merchant-api.test.papara.com/#AcceptPayments-step1) 
+
+[Also you can follow code below to create payment](https://github.com/paparateam/papara-android/blob/master/app/src/main/java/com/mobillium/paparasdk/sdk/sampleapp/ui/PaymentActivity.java#L47)
+
+ ```java
+
+private void paymentRequest() {
+   PaymentRequest cardAddRequest = new PaymentRequest(etAmount.getText().toString().trim().replace("\\,","\\."),"123456789","Test payment","https://www.paparamerchant.com/ipn","https://www.paparamerchant.com/checkout");
+        ServiceOperations.makeRequest(PaymentActivity.this, new RequestModel(Request.Method.POST, "payments", "Loading...", cardAddRequest), new ServiceCallback<PaymentResponse>() {
+            @Override
+            public void success(PaymentResponse result) {
+                PaparaPayment paparaPayment = new PaparaPayment();
+                paparaPayment.setPaymentId(result.getId());
+                paparaPayment.setPaymentUrl(result.getPaymentUrl());
+                paparaPayment.setReturningRedirectUrl(result.getReturningRedirectUrl());
+                Papara.getInstance().makePayment(PaymentActivity.this, paparaPayment, new PaparaPaymentCallback() {
+                    @Override
+                    public void onSuccess(String message, int code) {
+                        //Payment Successful
+                        showResultDialog(message, code);
+                        Toast.makeText(PaymentActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(String message, int code) {
+                        //Payment Failed
+                        showResultDialog(message, code);
+                        Toast.makeText(PaymentActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onCancel(String message, int code) {
+                        //Payment Cancelled by user
+                        showResultDialog(message, code);
+                        Toast.makeText(PaymentActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void error(ServiceException e) {
+
+
+            }
+        }, new TypeToken<BaseResponse<PaymentResponse>>() {
+        });
+    }
+```
 
 Secondly, you need to create a **PaparaPayment** model by using result of the API request. PaparaPayment model needs 3 parameters
 - Payment Id
